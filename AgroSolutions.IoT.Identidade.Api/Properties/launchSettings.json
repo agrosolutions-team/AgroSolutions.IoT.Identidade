@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "AgroSolutions.IoT.Identidade.Api": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:50482;http://localhost:50483"
+    }
+  }
+}
