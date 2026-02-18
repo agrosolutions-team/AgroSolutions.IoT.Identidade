@@ -17,8 +17,5 @@ public class ApplicationDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
-        
-        // Seed de dados iniciais
-        DatabaseSeeder.SeedData(modelBuilder);
     }
 }

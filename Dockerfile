@@ -10,12 +10,12 @@ COPY ["AgroSolutions.IoT.Identidade.Domain/AgroSolutions.IoT.Identidade.Domain.c
 COPY ["AgroSolutions.IoT.Identidade.Infrastructure/AgroSolutions.IoT.Identidade.Infrastructure.csproj", "AgroSolutions.IoT.Identidade.Infrastructure/"]
 
 # Restaurar os pacotes
-RUN dotnet restore -a $TARGETARCH "groSolutions.IoT.Identidade.Api/groSolutions.IoT.Identidade.Api.csproj"
+RUN dotnet restore -a $TARGETARCH "AgroSolutions.IoT.Identidade.Api/AgroSolutions.IoT.Identidade.Api.csproj"
 
 # Copiar tudo e compilar
 COPY . .
-WORKDIR "/src/groSolutions.IoT.Identidade.Api"
-RUN dotnet publish -a $TARGETARCH "groSolutions.IoT.Identidade.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+WORKDIR "/src/AgroSolutions.IoT.Identidade.Api"
+RUN dotnet publish -a $TARGETARCH "AgroSolutions.IoT.Identidade.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 # Etapa 2: imagem final
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
@@ -31,11 +31,13 @@ RUN apt-get update && apt-get install -y wget ca-certificates gnupg \
 ENV CORECLR_ENABLE_PROFILING=1 \
 CORECLR_PROFILER={36032161-FFC0-4B61-B559-F6C5D41BAE5A} \
 CORECLR_NEWRELIC_HOME=/usr/local/newrelic-dotnet-agent \
-CORECLR_PROFILER_PATH=/usr/local/newrelic-dotnet-agent/libNewRelicProfiler.so
+CORECLR_PROFILER_PATH=/usr/local/newrelic-dotnet-agent/libNewRelicProfiler.so \
+WEBSITES_ENABLE_APP_SERVICE_STORAGE=false \
+NEW_RELIC_APP_NAME=AgroSolutions.IoT.Identidade
 
 WORKDIR /app
 COPY --from=build /app/publish .
 
-EXPOSE 8080
-ENV ASPNETCORE_URLS=http://+:8080
-ENTRYPOINT ["dotnet", "groSolutions.IoT.Identidade.Api.dll"]
+EXPOSE 9000
+ENV ASPNETCORE_URLS=http://+:9000
+ENTRYPOINT ["dotnet", "AgroSolutions.IoT.Identidade.Api.dll"]
